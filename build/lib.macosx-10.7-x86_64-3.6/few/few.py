@@ -57,7 +57,7 @@ class FEW(SurvivalMixin, VariationMixin, EvaluationMixin, BaseEstimator):
                  random_state=np.random.randint(9999999), verbosity=0,
                  scoring_function=None, disable_update_check=False,
                  elitism=True, boolean = False,classification=False,clean=False,
-                 track_diversity=False,mdr=False,otype='f',c=True, weight_parents=False):
+                 track_diversity=False,mdr=False,otype='f',c=True):
                 # sets up GP.
 
         # Save params to be recalled later by get_params()
@@ -90,8 +90,6 @@ class FEW(SurvivalMixin, VariationMixin, EvaluationMixin, BaseEstimator):
         self.tourn_size = tourn_size
         self.fit_choice = fit_choice
         self.op_weight = op_weight
-        self.max_stall = max_stall
-        self.weight_parents = weight_parents
         self.seed_with_ml = seed_with_ml
         self.erc = erc
         self.random_state = random_state
@@ -277,7 +275,7 @@ class FEW(SurvivalMixin, VariationMixin, EvaluationMixin, BaseEstimator):
         stall_count = 0
         # for each generation g
         for g in np.arange(self.generations):
-            if stall_count == self.max_stall:
+            if stall_count == max_stall:
                 break;
 
             if self.track_diversity:
@@ -863,9 +861,6 @@ def main():
 
     parser.add_argument('--mdr', action='store_true',dest='MDR',default=False,
                         help='Use MDR nodes.')
-    
-    parser.add_argument('--weight_parents', action='store_true',dest='WEIGHT_PARENTS',default=False,
-                        help='Feature importance determines parent pressure for selection.')
 
     parser.add_argument('--diversity', action='store_true',
                         dest='TRACK_DIVERSITY', default=False,
@@ -943,14 +938,14 @@ def main():
                   min_depth = args.MIN_DEPTH,max_depth = args.MAX_DEPTH,
                   sel = args.SEL, tourn_size = args.TOURN_SIZE,
                   seed_with_ml = args.SEED_WITH_ML, op_weight = args.OP_WEIGHT,
-                  max_stall = args.MAX_STALL,
+                  stall_count = args.MAX_STALL,
                   erc = args.ERC, random_state=args.RANDOM_STATE,
                   verbosity=args.VERBOSITY,
                   disable_update_check=args.DISABLE_UPDATE_CHECK,
                   fit_choice = args.FIT_CHOICE,boolean=args.BOOLEAN,
                   classification=args.CLASSIFICATION,clean = args.CLEAN,
                   track_diversity=args.TRACK_DIVERSITY,mdr=args.MDR,
-                  otype=args.OTYPE,c=args.c, weight_parents = args.WEIGHT_PARENTS)
+                  otype=args.OTYPE,c=args.c)
 
     learner.fit(training_features, training_labels)
     # pdb.set_trace()

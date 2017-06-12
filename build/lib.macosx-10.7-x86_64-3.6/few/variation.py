@@ -25,10 +25,7 @@ class VariationMixin(object):
                 offspring = copy.deepcopy(list(x for i,x in zip(self.ml.coef_, self.valid(parents)) if  (i != 0).any()))
             elif hasattr(self.ml,'feature_importances_'):
                 # for tree methods, filter our individuals with 0 feature importance
-                
-                #offspring = copy.deepcopy(list(x for i,x in zip(self.ml.feature_importances_, self.valid(parents)) if  i != 0))
-                weights = (feature_importances_-min(feature_importances_))/(max(feature_importances_)-min(feature_importances_))
-                offspring = np.random.choice(self.valid(parents), 10, weights);
+                offspring = copy.deepcopy(list(x for i,x in zip(self.ml.feature_importances_, self.valid(parents)) if  i != 0))
             else:
                 offspring = copy.deepcopy(self.valid(parents))
         else:
